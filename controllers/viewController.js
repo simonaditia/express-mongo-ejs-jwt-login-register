@@ -26,9 +26,9 @@ const homePage = async (req, res) => {
     finalUserName = userName.join("");
 
     let say = "";
-    const pagi = moment("08:00am", "hh:mma");
-    const malam = moment("06:00pm", "hh:mma");
     momentTimeZone.tz.setDefault("Asia/Jakarta");
+    const pagi = momentTimeZone("08:00am", "hh:mma");
+    const malam = momentTimeZone("06:00pm", "hh:mma");
     let currentTime = momentTimeZone();
 
     if (currentTime.isBefore(malam) && currentTime.isAfter(pagi)) {
