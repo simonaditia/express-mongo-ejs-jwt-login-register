@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+const cors = require("cors");
 const port = process.env.PORT || 4001;
 const userRoute = require("./routes/user");
 const viewRoute = require("./routes/view");
@@ -12,8 +14,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+const corsOptions = {
+    origin: process.env.ALLOWED_CLIENTS.split(","),
+};
+app.use(cors(corsOptions));
+
+app.use(express.static(__dirname + "/public/"));
+app.use(express.json());
+
+app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
-app.use(express.static("public"));
 
 connectDB();
 
