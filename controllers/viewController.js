@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const moment = require("moment");
+const momentTimeZone = require("moment-timezone");
 const loginPage = (req, res) => {
     res.render("login");
 };
@@ -27,14 +28,20 @@ const homePage = async (req, res) => {
     let say = "";
     const pagi = moment("08:00am", "hh:mma");
     const malam = moment("06:00pm", "hh:mma");
-    let currentTime = moment();
+    momentTimeZone.tz.setDefault("Asia/Jakarta");
+    let currentTime = momentTimeZone();
 
     if (currentTime.isBefore(malam) && currentTime.isAfter(pagi)) {
-        say = "Selamat siang";
+        say = "Selamat siang waktu Jakarta";
     } else {
-        say = "Selamat malam";
+        say = "Selamat malam waktu Jakarta";
     }
-    res.render("home", { say, currentTime, userEmail, finalUserName });
+    res.render("home", {
+        say,
+        currentTime,
+        userEmail,
+        finalUserName,
+    });
 };
 
 module.exports = { loginPage, registerPage, homePage };
