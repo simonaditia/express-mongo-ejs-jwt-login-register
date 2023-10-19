@@ -10,9 +10,19 @@ const registerUser = async (req, res) => {
 
     if (data.email.length < 10 || data.email.length > 15) {
         res.send(
-            "Sory repeat your email minimum 10 character and  maximum 15 character"
+            "Sory repeat your email, minimum 10 character and maximum 15 character"
         );
-        return false
+        return false;
+    }
+
+    const passwordPattern =
+        /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+    if (!passwordPattern.test(data.password)) {
+        res.send(
+            "Password must contain at least one digit, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long."
+        );
+        return false;
     }
 
     const existingUser = await User.findOne({ email: data.email });
@@ -30,6 +40,23 @@ const registerUser = async (req, res) => {
 };
 const loginUser = async (req, res) => {
     try {
+        if (req.body.email.length < 10 || req.body.email.length > 15) {
+            res.send(
+                "Sory repeat your email, minimum 10 character and maximum 15 character"
+            );
+            return false;
+        }
+
+        const passwordPattern =
+            /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+        if (!passwordPattern.test(req.body.password)) {
+            res.send(
+                "Password must contain at least one digit, one special character, one lowercase letter, one uppercase letter, and be at least 8 characters long."
+            );
+            return false;
+        }
+
         const check = await User.findOne({ email: req.body.email });
         if (!check) {
             res.send("email cannot found!");
